@@ -1,6 +1,13 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+# Default Content
+
+Content/Characters
+Content/Collections
+Content/LevelPrototyping
+Content/ThirdPerson
+
 # Compiled Object files
 *.slo
 *.lo
