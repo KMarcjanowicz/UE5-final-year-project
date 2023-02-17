@@ -14,5 +14,7 @@ class GAME_API UBTSelectPatrolPoint : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-		virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory) override;
+	UBTSelectPatrolPoint();
+
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory) override;
 };

@@ -78,6 +78,11 @@ void AGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGameCharacter::TouchStopped);
 }
 
+void AGameCharacter::Tick(float _DeltaSeconds)
+{
+	Super::Tick(_DeltaSeconds);
+}
+
 void AGameCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	Jump();

@@ -6,6 +6,10 @@
 #include "AIPatrolController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+UBTSelectPatrolPoint::UBTSelectPatrolPoint() {
+	NodeName = TEXT("Select Patrol Point");
+}
+
 EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory)
 {
 	AAIPatrolController* AIController = Cast<AAIPatrolController>(_OwnerComp.GetAIOwner());
