@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Blueprint/UserWidget.h"
+#include "UserInterface/UWPlayerInterface.h"
 #include "GameGameMode.generated.h"
+
 
 UCLASS(minimalapi)
 class AGameGameMode : public AGameModeBase
@@ -13,6 +16,18 @@ class AGameGameMode : public AGameModeBase
 
 public:
 	AGameGameMode();
+
+protected:
+
+	UPROPERTY(EditAnywhere, Category="Class Types")
+	TSubclassOf<UUserWidget> WidgetClass;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	class UUWPlayerInterface* PlayerInterface;
+
+public:
+	virtual void BeginPlay() override;
+
 };
 
 
