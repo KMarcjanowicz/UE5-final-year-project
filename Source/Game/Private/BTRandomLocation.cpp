@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -20,10 +21,10 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 	if (AIController) {
 
 		//get AI Pawn
-		const APawn* AIPawn { AIController->GetPawn() };
+		const APawn* AIPawn{ AIController->GetPawn() };
 
 		//get origin location
-		const FVector OriginLocation { AIPawn->GetActorLocation() };
+		const FVector OriginLocation{ AIPawn->GetActorLocation() };
 
 		//Navigation system
 		const UNavigationSystemV1* NavSystem{ UNavigationSystemV1::GetCurrent(GetWorld()) };
@@ -31,14 +32,12 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 
 		if (IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(OriginLocation, SearchRadius, Location))
 		{
-		//Black Board comp get it
-		UBlackboardComponent* BlackBoardComp = AIController->GetBlackboardComp();
+			//Black Board comp get it
+			UBlackboardComponent* BlackBoardComp = AIController->GetBlackboardComp();
 
-		UE_LOG(LogTemp, Warning, TEXT("Current values are: %d, %d, %d"), Location.Location.X, Location.Location.Y, Location.Location.Z);
-
-		BlackBoardComp->SetValueAsVector("LocationToGo", Location.Location);
+			BlackBoardComp->SetValueAsVector("LocationToGo", Location.Location);
 		}
-		
+
 		//Signal the behaviour tree comp
 		FinishLatentTask(_OwnerComp, EBTNodeResult::Succeeded);
 		return EBTNodeResult::Succeeded;

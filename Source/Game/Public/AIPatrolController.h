@@ -22,6 +22,10 @@ class GAME_API AAIPatrolController : public AAIController
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTreeComponent* BehaviorTreeComp;
 
+	/* Behavior tree component */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	class UAIPerceptionComponent* AIPerceptionComp;
+
 	/* keys for the blackboard */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 	FName LocationToGoKey;
