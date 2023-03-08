@@ -15,6 +15,7 @@ AGameCharacter::AGameCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->bHiddenInGame = false;
 
 	// set our turn rate for input
 	TurnRateGamepad = 50.f;
@@ -33,6 +34,7 @@ AGameCharacter::AGameCharacter()
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = 60.0f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
@@ -50,6 +52,11 @@ AGameCharacter::AGameCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	// Additional Logic
+
+	// for crouching logic
+	bIsCrouching = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,5 +138,18 @@ void AGameCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
+	}
+}
+
+void AGameCharacter::ClickCrouch()
+{
+	if (!bIsCrouching) {
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Crouch!")));
+		Crouch();
+		bIsCrouching = true;
+	}
+	else {
+		UnCrouch();
+		bIsCrouching = false;
 	}
 }
