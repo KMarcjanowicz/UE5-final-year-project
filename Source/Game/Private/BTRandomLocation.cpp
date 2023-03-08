@@ -34,6 +34,8 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 		//Black Board comp get it
 		UBlackboardComponent* BlackBoardComp = AIController->GetBlackboardComp();
 
+		UE_LOG(LogTemp, Warning, TEXT("Current values are: %d, %d, %d"), Location.Location.X, Location.Location.Y, Location.Location.Z);
+
 		BlackBoardComp->SetValueAsVector("LocationToGo", Location.Location);
 		}
 		
