@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/ArrowComponent.h"
+#include "Perception/AISightTargetInterface.h"
 #include "GameCharacter.generated.h"
 
 UCLASS(config=Game)
-class AGameCharacter : public ACharacter
+class AGameCharacter : public ACharacter, public IAISightTargetInterface
 {
 	GENERATED_BODY()
 
@@ -78,5 +79,22 @@ protected:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Crouch)
 		bool bIsCrouching;
+
+	/* function to check multiple bones in the character */
+	virtual bool CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation, int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor = nullptr, const bool* bWasVisible = nullptr, int32* UserData = nullptr) const;
+
+public:
+
+	/** Current Target Bone */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName TargetBone;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		/* Array of Important bones */
+		TArray<FName> ViewTargets;
+
+	UFUNCTION()
+	void NextViewTarget();
+	int32 Index;
 };
 

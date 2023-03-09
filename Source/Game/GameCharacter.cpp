@@ -57,6 +57,13 @@ AGameCharacter::AGameCharacter()
 
 	// for crouching logic
 	bIsCrouching = false;
+
+	ViewTargets.SetNum(5);
+	ViewTargets.Insert(TEXT("Head"), 0);
+	ViewTargets.Insert(TEXT("LeftHand"), 1);
+	ViewTargets.Insert(TEXT("LeftFoot"), 2);
+	ViewTargets.Insert(TEXT("RightHand"), 3);
+	ViewTargets.Insert(TEXT("RightFoot"), 4);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -152,4 +159,51 @@ void AGameCharacter::ClickCrouch()
 		UnCrouch();
 		bIsCrouching = false;
 	}
+}
+
+// custom view target for AI Perception
+bool AGameCharacter::CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation, int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor, const bool* bWasVisible, int32* UserData) const
+{
+	static const FName NAME_AILineOfSight = FName(TEXT("TestPawnLineOfSight"));
+
+	FHitResult HitResult;
+
+	for (int32 i = 0; i < ViewTargets.Num(); i++) {
+
+		FVector SocketLocation = GetMesh()->GetSocketLocation(ViewTargets[i]);
+
+		const bool bHitSocket = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, SocketLocation,
+			FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
+
+
+		NumberOfLoSChecksPerformed++;
+
+		if (bHitSocket == false || (HitResult.GetActor() != nullptr && HitResult.GetActor()->IsOwnedBy(this)))
+		{
+			OutSeenLocation = SocketLocation;
+			OutSightStrength = 1;
+			return true;
+		}
+
+		const bool bHit = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, GetActorLocation(),
+			FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
+
+		NumberOfLoSChecksPerformed++;
+
+		if (bHit == false || (HitResult.GetActor() != nullptr && HitResult.GetActor()->IsOwnedBy(this)))
+		{
+			OutSeenLocation = GetActorLocation();
+			OutSightStrength = 1;
+			return true;
+		}
+	}
+
+	OutSightStrength = 0;
+	return false;
+}
+
+void AGameCharacter::NextViewTarget()
+{
+	Index < ViewTargets.Num() - 1 ? Index++ : Index = 0;
+	TargetBone = ViewTargets[Index];
 }
