@@ -15,6 +15,10 @@ public:
 	// Sets default values for this character's properties
 	AAiEnemyCharacter();
 
+	/* Behaviour tree for AI logic*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		class UBehaviorTree* BehaviorTree;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

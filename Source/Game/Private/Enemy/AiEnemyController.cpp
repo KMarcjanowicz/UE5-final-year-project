@@ -5,6 +5,9 @@
 #include "Enemy/AiEnemyCharacter.h"
 #include "../../GameCharacter.h"
 #include "Runtime/AIModule/Classes/Perception/AISenseConfig_Sight.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "Kismet/GameplayStatics.h"
 
 void AAiEnemyController::BeginPlay()
 {
@@ -33,6 +36,10 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 	//register the sight sense to the perception component
 	PerceptionComp->ConfigureSense(*Sight);
 	PerceptionComp->SetDominantSense(Sight->GetSenseImplementation());
+
+	/* initialize the BB and BT components*/
+	BehaviorTreeComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
+	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 }
 
 void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
@@ -46,6 +53,15 @@ void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 void AAiEnemyController::OnPossess(APawn* _InPawn)
 {
 	Super::OnPossess(_InPawn);
+
+	/* get reference to character */
+
+	if (Agent) {
+		if (Agent->BehaviorTree->BlackboardAsset) {
+			BlackboardComp->InitializeBlackboard(*(Agent->BehaviorTree->BlackboardAsset));
+		}
+		BehaviorTreeComp->StartTree(*Agent->BehaviorTree);
+	}
 
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AAiEnemyController::OnPerception);
 }

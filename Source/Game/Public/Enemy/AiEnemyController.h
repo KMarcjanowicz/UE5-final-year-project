@@ -7,6 +7,14 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "AiEnemyController.generated.h"
 
+
+UENUM()
+enum class EAIStates : uint8 {
+	S_Normal		UMETA(DisplayName = "Normal"),
+	S_Investigate	UMETA(DisplayName = "Investigate"),
+	S_Chase			UMETA(DisplayName = "Chase")
+};
+
 /**
  * 
  */
@@ -17,12 +25,14 @@ class GAME_API AAiEnemyController : public AAIController
 
 protected:
 
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	// Component
+
 	/* Perception Component */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		class UAIPerceptionComponent* PerceptionComp;
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 public:
 	AAiEnemyController(const FObjectInitializer& _ObjectInitializer);
@@ -30,6 +40,14 @@ public:
 	/* Character to control */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		class AAiEnemyCharacter* Agent;
+
+	/* Blackboard component */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		class UBlackboardComponent* BlackboardComp;
+
+	/* Behavior tree component */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		class UBehaviorTreeComponent* BehaviorTreeComp;
 
 	UFUNCTION()
 		void OnPerception(AActor* _Actor, FAIStimulus _Stimulus);
@@ -39,4 +57,8 @@ public:
 
 	virtual void OnPossess(APawn* _InPawn) override;
 
+
+	/* Inline getter functions */
+	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; };
+	FORCEINLINE UBehaviorTreeComponent* GetBehaviourTree() const { return BehaviorTreeComp; };
 };
