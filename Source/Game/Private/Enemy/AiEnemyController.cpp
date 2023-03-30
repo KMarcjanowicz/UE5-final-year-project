@@ -12,12 +12,6 @@
 void AAiEnemyController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AAiEnemyCharacter* tmp = Cast<AAiEnemyCharacter>(GetPawn());
-
-	if(tmp) {
-		Agent = tmp;
-	}
 }
 
 AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitializer)
@@ -54,10 +48,14 @@ void AAiEnemyController::OnPossess(APawn* _InPawn)
 {
 	Super::OnPossess(_InPawn);
 
-	/* get reference to character */
+	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Possessed")));
+
+	Agent = Cast<AAiEnemyCharacter>(GetPawn());
 
 	if (Agent) {
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Agent is valid")));
 		if (Agent->BehaviorTree->BlackboardAsset) {
+			GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Blackboard init")));
 			BlackboardComp->InitializeBlackboard(*(Agent->BehaviorTree->BlackboardAsset));
 		}
 		BehaviorTreeComp->StartTree(*Agent->BehaviorTree);

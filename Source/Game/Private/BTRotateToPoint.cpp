@@ -2,7 +2,7 @@
 
 
 #include "BTRotateToPoint.h"
-#include "AIPatrolController.h"
+#include "Enemy/Patrol/AiEnemyPatrolController.h"
 #include "AIPatrolPoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -15,7 +15,7 @@ UBTRotateToPoint::UBTRotateToPoint()
 
 EBTNodeResult::Type UBTRotateToPoint::ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory)
 {
-	AAIPatrolController* AIController = Cast<AAIPatrolController>(_OwnerComp.GetAIOwner());
+	AAiEnemyPatrolController* AIController = Cast<AAiEnemyPatrolController>(_OwnerComp.GetAIOwner());
 
 	if (AIController) 
 	{

@@ -18,4 +18,6 @@ public:
 	/* array of actor points for the AI logic */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 	TArray<AActor*> PatrolPoints;
+
+	FORCEINLINE TArray<AActor*> GetPatrolPoints() const { return PatrolPoints; };
 };

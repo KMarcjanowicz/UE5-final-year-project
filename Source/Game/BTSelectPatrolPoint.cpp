@@ -3,7 +3,7 @@
 #include "BTSelectPatrolPoint.h"
 #include "Game.h"
 #include "AIPatrolPoint.h"
-#include "AIPatrolController.h"
+#include "Public/Enemy/Patrol/AiEnemyPatrolController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTSelectPatrolPoint::UBTSelectPatrolPoint() {
@@ -12,7 +12,7 @@ UBTSelectPatrolPoint::UBTSelectPatrolPoint() {
 
 EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory)
 {
-	AAIPatrolController* AIController = Cast<AAIPatrolController>(_OwnerComp.GetAIOwner());
+	AAiEnemyPatrolController* AIController = Cast<AAiEnemyPatrolController>(_OwnerComp.GetAIOwner());
 
 	if (AIController) {
 
@@ -34,7 +34,7 @@ EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _O
 			NextPatrolPoint = Cast<AAIPatrolPoint>(AvailablePatrolPoints[0]);
 			AIController->CurrentPatrolPoint = 0;
 		}
-
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Success")));
 		BlackBoardComp->SetValueAsObject("LocationToGo", NextPatrolPoint);
 
 		return EBTNodeResult::Succeeded;

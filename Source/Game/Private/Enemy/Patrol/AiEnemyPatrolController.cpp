@@ -2,6 +2,7 @@
 
 
 #include "Enemy/Patrol/AiEnemyPatrolController.h"
+#include "Enemy/Patrol/AiEnemyPatrolCharacter.h"
 
 void AAiEnemyPatrolController::OnPossess(APawn* _InPawn)
 {
@@ -11,5 +12,9 @@ void AAiEnemyPatrolController::OnPossess(APawn* _InPawn)
 	LocationToGoKey = "LocationToGo";
 	PlayerKey = "Target";
 
+	AAiEnemyPatrolCharacter* PatrolAgent = Cast<AAiEnemyPatrolCharacter>(Agent);
+
+	PatrolPoints = PatrolAgent->GetPatrolPoints();
 	CurrentPatrolPoint = 0;
+
 }
