@@ -13,13 +13,6 @@ UCLASS()
 class GAME_API AAiEnemyPatrolController : public AAiEnemyController
 {
 	GENERATED_BODY()
-	
-	/* keys for the blackboard */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
-	FName LocationToGoKey;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
-	FName PlayerKey;
 
 	/* array of actor points for the AI logic */
 	UPROPERTY(VisibleAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))

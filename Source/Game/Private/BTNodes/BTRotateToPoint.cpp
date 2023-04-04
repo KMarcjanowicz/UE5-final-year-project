@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTRotateToPoint.h"
+#include "BTNodes/BTRotateToPoint.h"
 #include "Enemy/Patrol/AiEnemyPatrolController.h"
 #include "AIPatrolPoint.h"
 #include "BehaviorTree/BlackboardComponent.h"

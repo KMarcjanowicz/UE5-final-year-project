@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Perception/AIPerceptionComponent.h"
+#include "../Interfaces/SightPerceptionInterface.h"
 #include "AiEnemyController.generated.h"
 
 
@@ -19,7 +20,7 @@ enum class EAIStates : uint8 {
  * 
  */
 UCLASS()
-class GAME_API AAiEnemyController : public AAIController
+class GAME_API AAiEnemyController : public AAIController, public ISightPerceptionInterface
 {
 	GENERATED_BODY()
 
@@ -49,6 +50,22 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		class UBehaviorTreeComponent* BehaviorTreeComp;
 
+	/* keys for the blackboard */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName LocationToGoKey;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName PlayerKey;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName LastKnownLocation;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName InvestigatingState;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FName SeeTarget;
+
 	UFUNCTION()
 		void OnPerception(AActor* _Actor, FAIStimulus _Stimulus);
 
@@ -61,4 +78,8 @@ public:
 	/* Inline getter functions */
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; };
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviourTree() const { return BehaviorTreeComp; };
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "StimuliInterface")
+		void InvestigateOnSight(); virtual void InvestigateOnSight_Implementation() override;
 };

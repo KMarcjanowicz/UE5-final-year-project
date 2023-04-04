@@ -4,23 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "BTRandomLocation.generated.h"
+#include "BTInvestigate.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAME_API UBTRandomLocation : public UBTTaskNode
+class GAME_API UBTInvestigate : public UBTTaskNode
 {
 	GENERATED_BODY()
 
 public:
-	UBTRandomLocation();
-	
-private:
+	UBTInvestigate();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory) override;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
-	float SearchRadius{ 1000.0f };
 };

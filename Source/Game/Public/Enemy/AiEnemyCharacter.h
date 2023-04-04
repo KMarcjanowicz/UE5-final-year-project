@@ -6,6 +6,14 @@
 #include "GameFramework/Character.h"
 #include "AiEnemyCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EVictory : uint8 {
+	VE_Dance       UMETA(DisplayName = "Dance"),
+	VE_Rain        UMETA(DisplayName = "Rain"),
+	VE_Song        UMETA(DisplayName = "Song"),
+};
+
+
 UCLASS()
 class GAME_API AAiEnemyCharacter : public ACharacter
 {

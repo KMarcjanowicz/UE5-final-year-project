@@ -2,10 +2,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTRandomLocation.h"
-#include "AIRandomController.h"
+#include "BTNodes/BTRandomLocation.h"
+#include "AIRandomController.h" //-- delete afterwards
+#include "Enemy/Patrol/AiEnemyPatrolController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UBTRandomLocation::UBTRandomLocation()
 {
@@ -16,12 +18,16 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 {
 	FNavLocation Location{};
 
-	AAIRandomController* AIController = Cast<AAIRandomController>(_OwnerComp.GetAIOwner());
+	//check if the owner has the correct interface
+	if (_OwnerComp.GetAIOwner()->GetClass()->ImplementsInterface(USightPerceptionInterface::StaticClass())) {
 
-	if (AIController) {
+		AAiEnemyController* AIController = Cast<AAiEnemyController>(_OwnerComp.GetAIOwner());
 
-		//get AI Pawn
-		const APawn* AIPawn{ AIController->GetPawn() };
+		const APawn* AIPawn{ _OwnerComp.GetAIOwner()->GetPawn() };
+
+		//change movement speed of pawn
+		UCharacterMovementComponent* AIPawnMovementComp = Cast<UCharacterMovementComponent>(AIPawn->GetMovementComponent());
+		AIPawnMovementComp->MaxWalkSpeed = 100.0f;
 
 		//get origin location
 		const FVector OriginLocation{ AIPawn->GetActorLocation() };
@@ -29,18 +35,18 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 		//Navigation system
 		const UNavigationSystemV1* NavSystem{ UNavigationSystemV1::GetCurrent(GetWorld()) };
 
-
 		if (IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(OriginLocation, SearchRadius, Location))
 		{
 			//Black Board comp get it
 			UBlackboardComponent* BlackBoardComp = AIController->GetBlackboardComp();
 
-			BlackBoardComp->SetValueAsVector("LocationToGo", Location.Location);
+			BlackBoardComp->SetValueAsVector("LastKnownLocation", Location.Location);
 		}
 
 		//Signal the behaviour tree comp
 		FinishLatentTask(_OwnerComp, EBTNodeResult::Succeeded);
-		return EBTNodeResult::Succeeded;
+		return EBTNodeResult::Succeeded;	
 	}
+
 	return EBTNodeResult::Failed;
 }

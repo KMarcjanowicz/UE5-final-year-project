@@ -34,14 +34,38 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 	/* initialize the BB and BT components*/
 	BehaviorTreeComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
+
+	/* initialize the keys */
+	LocationToGoKey = "LocationToGo";
+	PlayerKey = "Target";
+	InvestigatingState = "bIsInvestigating";
+	SeeTarget = "bSeesTarget";
+	LastKnownLocation = "LastKnownLocation";
 }
 
 void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 {
 	AGameCharacter* Chr = Cast<AGameCharacter>(_Actor);
-	if (Chr == nullptr) { return;}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "I see you!");
+	if (Chr == nullptr) {return;}
+
 	SetFocus(_Stimulus.WasSuccessfullySensed() ? Chr : nullptr);
+
+	//Set the location of the stimulus into the black board
+	BlackboardComp->SetValueAsVector(LastKnownLocation, _Stimulus.StimulusLocation);
+
+	//Make AI investigate
+	//turn the investigation boolean true only if sense pawn
+	//false will need to be triggered by the node in the behaviour tree after investigation
+	if (_Stimulus.WasSuccessfullySensed()) {
+		BlackboardComp->SetValueAsBool(InvestigatingState, _Stimulus.WasSuccessfullySensed());
+		BlackboardComp->SetValueAsObject(PlayerKey, Chr);
+		BlackboardComp->SetValueAsBool(SeeTarget, true);
+	}
+	else{
+		//Set the location of the stimulus into the black board
+		BlackboardComp->SetValueAsVector(LastKnownLocation, _Stimulus.StimulusLocation);
+		BlackboardComp->SetValueAsBool(SeeTarget, false);
+	}
 }
 
 void AAiEnemyController::OnPossess(APawn* _InPawn)
@@ -62,4 +86,9 @@ void AAiEnemyController::OnPossess(APawn* _InPawn)
 	}
 
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AAiEnemyController::OnPerception);
+}
+
+void AAiEnemyController::InvestigateOnSight_Implementation()
+{
+	BlackboardComp->SetValueAsBool(InvestigatingState, false);
 }

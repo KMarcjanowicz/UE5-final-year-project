@@ -8,10 +8,6 @@ void AAiEnemyPatrolController::OnPossess(APawn* _InPawn)
 {
 	Super::OnPossess(_InPawn);
 
-	/* initialize the keys */
-	LocationToGoKey = "LocationToGo";
-	PlayerKey = "Target";
-
 	AAiEnemyPatrolCharacter* PatrolAgent = Cast<AAiEnemyPatrolCharacter>(Agent);
 
 	PatrolPoints = PatrolAgent->GetPatrolPoints();

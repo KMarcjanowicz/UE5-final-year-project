@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BTSelectPatrolPoint.h"
-#include "Game.h"
+#include "BTNodes/BTSelectPatrolPoint.h"
+#include "../../Game.h"
 #include "AIPatrolPoint.h"
-#include "Public/Enemy/Patrol/AiEnemyPatrolController.h"
+#include "Enemy/Patrol/AiEnemyPatrolController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTSelectPatrolPoint::UBTSelectPatrolPoint() {
