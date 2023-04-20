@@ -32,7 +32,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Input)
 	float TurnRateGamepad;
 
+	//Array of PointLight actors
+	TArray<AActor*> PointLights;
+
 protected:
+
+	/* For visibility in lights */
+	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+	bool bIsVisibleInLight;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -64,6 +71,8 @@ protected:
 	// End of APawn interface
 
 	virtual void Tick(float _DeltaSeconds) override;
+
+	virtual void BeginPlay() override;
 
 public:
 	/** Returns CameraBoom subobject **/

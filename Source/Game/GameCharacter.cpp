@@ -7,6 +7,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/PointLight.h"
+#include "Components/PointLightComponent.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 // AGameCharacter
@@ -95,6 +99,37 @@ void AGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AGameCharacter::Tick(float _DeltaSeconds)
 {
 	Super::Tick(_DeltaSeconds);
+
+	bIsVisibleInLight = false;
+
+	for (AActor* Actor : PointLights) {
+		APointLight* PointLight = Cast<APointLight>(Actor);
+
+		if (PointLight) {
+
+			float Distance = (PointLight->GetActorLocation() - this->GetActorLocation()).Size();
+
+			if (Distance < PointLight->PointLightComponent->AttenuationRadius) {
+				FCollisionQueryParams QueryParams;
+				QueryParams.AddIgnoredActor(this);
+				QueryParams.bTraceComplex = true;
+
+				FHitResult Hit;
+				if (!GetWorld()->LineTraceSingleByChannel(Hit, this->GetActorLocation(), PointLight->GetActorLocation(), ECC_Visibility, QueryParams)) {
+					//we are visible in the light!
+					bIsVisibleInLight = true;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void AGameCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UGameplayStatics::GetAllActorsOfClass(this, APointLight::StaticClass(), PointLights);
 }
 
 void AGameCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)

@@ -8,14 +8,6 @@
 #include "../Interfaces/SightPerceptionInterface.h"
 #include "AiEnemyController.generated.h"
 
-
-UENUM()
-enum class EAIStates : uint8 {
-	S_Normal		UMETA(DisplayName = "Normal"),
-	S_Investigate	UMETA(DisplayName = "Investigate"),
-	S_Chase			UMETA(DisplayName = "Chase")
-};
-
 /**
  * 
  */
@@ -35,6 +27,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		class UAIPerceptionComponent* PerceptionComp;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+		FString State;
 public:
 	AAiEnemyController(const FObjectInitializer& _ObjectInitializer);
 
@@ -72,14 +66,32 @@ public:
 	/* A Sight Sense */
 	class UAISenseConfig_Sight* Sight;
 
-	virtual void OnPossess(APawn* _InPawn) override;
+	/* A Hearing Sense */
+	class UAISenseConfig_Hearing* Hearing;
 
+	/* stimuli ID */
+	FAISenseID SightID;
+	FAISenseID HearingID;
+
+	/* percentage of how much the enemy is alarmed - PayDay style */
+	UPROPERTY(BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
+		float AlarmedPercentage = 0.0f;
+
+	virtual void OnPossess(APawn* _InPawn) override;
 
 	/* Inline getter functions */
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; };
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviourTree() const { return BehaviorTreeComp; };
+	FORCEINLINE FString GetAIState() const { return State; };
+
+	/* Set AI state (also call the function in Character to change the label) */
+	UFUNCTION(BlueprintCallable, Category = "AI")
+		void SetAIState(FString _State);
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "StimuliInterface")
 		void InvestigateOnSight(); virtual void InvestigateOnSight_Implementation() override;
+
+
+
 };

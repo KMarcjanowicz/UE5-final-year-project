@@ -34,7 +34,7 @@ EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _O
 			NextPatrolPoint = Cast<AAIPatrolPoint>(AvailablePatrolPoints[0]);
 			AIController->CurrentPatrolPoint = 0;
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Success")));
+		//GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Success")));
 		BlackBoardComp->SetValueAsObject("LocationToGo", NextPatrolPoint);
 
 		return EBTNodeResult::Succeeded;

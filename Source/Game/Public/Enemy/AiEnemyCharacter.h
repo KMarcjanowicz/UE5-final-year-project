@@ -4,15 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/TextRenderComponent.h"
 #include "AiEnemyCharacter.generated.h"
-
-UENUM(BlueprintType)
-enum class EVictory : uint8 {
-	VE_Dance       UMETA(DisplayName = "Dance"),
-	VE_Rain        UMETA(DisplayName = "Rain"),
-	VE_Song        UMETA(DisplayName = "Song"),
-};
-
 
 UCLASS()
 class GAME_API AAiEnemyCharacter : public ACharacter
@@ -27,6 +20,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		class UBehaviorTree* BehaviorTree;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	class UTextRenderComponent* Label;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,4 +34,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Function to change the label text above the head of the character
+	void ChangeTextOnLabel(FString _TextToChange);
 };

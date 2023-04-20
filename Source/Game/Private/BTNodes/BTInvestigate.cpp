@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UBTInvestigate::UBTInvestigate()
 {
@@ -15,6 +16,12 @@ UBTInvestigate::UBTInvestigate()
 
 EBTNodeResult::Type UBTInvestigate::ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory)
 {
+	//change movement speed of pawn
+	const APawn* AIPawn{ _OwnerComp.GetAIOwner()->GetPawn() };
+	UCharacterMovementComponent* AIPawnMovementComp = Cast<UCharacterMovementComponent>(AIPawn->GetMovementComponent());
+	AIPawnMovementComp->MaxWalkSpeed = 300.0f;
+
+
 	ISightPerceptionInterface* Interface = Cast<ISightPerceptionInterface>(_OwnerComp.GetAIOwner());
 
 	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("I am invastigating!")));
