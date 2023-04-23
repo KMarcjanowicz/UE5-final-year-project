@@ -20,4 +20,6 @@ public:
 	TArray<AActor*> PatrolPoints;
 
 	FORCEINLINE TArray<AActor*> GetPatrolPoints() const { return PatrolPoints; };
+
+	virtual void Tick(float _DeltaTime) override;
 };

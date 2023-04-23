@@ -29,5 +29,10 @@ void UUWPlayerInterface::CrouchButtonPressed()
 
 void UUWPlayerInterface::SwitchCameraButtonPressed()
 {
+	Player->AimThrowObject();
+}
 
+void UUWPlayerInterface::UpdateRockCounter(int32 _Amount)
+{
+	RockAmount = _Amount;
 }

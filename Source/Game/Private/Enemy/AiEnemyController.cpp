@@ -25,12 +25,12 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 
 	Sight->SightRadius = 500.0f;
 	Sight->LoseSightRadius = Sight->SightRadius + 500.0f;
-	Sight->PeripheralVisionAngleDegrees = 70.0f;
+	Sight->PeripheralVisionAngleDegrees = 45.0f;
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
 	Sight->DetectionByAffiliation.bDetectFriendlies = true;
 	Sight->DetectionByAffiliation.bDetectNeutrals = true;
 
-	Hearing->HearingRange = 3000.0f;
+	Hearing->HearingRange = 1000.0f;
 	Hearing->DetectionByAffiliation.bDetectEnemies = true;
 	Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 	Hearing->DetectionByAffiliation.bDetectNeutrals = true;
@@ -59,12 +59,15 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 
 void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 {
-	//cast to the pawn that caused the stimulus
-	AGameCharacter* Chr = Cast<AGameCharacter>(_Actor);
-	if (Chr == nullptr) { return; }
+	FString Name = _Actor->GetClass()->GetName();
 
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Name of Class = %s "), *Name));
 
 	if (_Stimulus.Type == SightID) {
+		//cast to the pawn that caused the stimulus
+		AGameCharacter* Chr = Cast<AGameCharacter>(_Actor);
+		if (Chr == nullptr) { return; }
+
 		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Yellow, FString::Printf(TEXT("Sight!")));
 
 		//Set the location of the stimulus into the black board
@@ -133,6 +136,8 @@ void AAiEnemyController::InvestigateOnSight_Implementation()
 
 void AAiEnemyController::SetAIState(FString _State)
 {
-	State = _State;
-	Agent->ChangeTextOnLabel(_State);
+	if (State != _State) {
+		State = _State;
+		Agent->ChangeTextOnLabel(_State);
+	}
 }

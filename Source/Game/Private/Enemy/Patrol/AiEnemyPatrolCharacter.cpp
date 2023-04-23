@@ -3,3 +3,7 @@
 
 #include "Enemy/Patrol/AiEnemyPatrolCharacter.h"
 
+void AAiEnemyPatrolCharacter::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+}

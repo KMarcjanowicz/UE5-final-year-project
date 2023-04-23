@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "AiEnemyCharacter.generated.h"
 
 UCLASS()
@@ -18,10 +19,17 @@ public:
 
 	/* Behaviour tree for AI logic*/
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
-		class UBehaviorTree* BehaviorTree;
+	class UBehaviorTree* BehaviorTree;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
-	class UTextRenderComponent* Label;
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UTextRenderComponent* LabelComp;
+
+	// sight light for marking how much the Ai enemies can see
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USpotLightComponent* SightLightComp;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USpotLightComponent* SpotLightComp;
 
 protected:
 	// Called when the game starts or when spawned

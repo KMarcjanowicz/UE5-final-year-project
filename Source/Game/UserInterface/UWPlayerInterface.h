@@ -18,8 +18,11 @@ class GAME_API UUWPlayerInterface : public UUserWidget
 
 protected:
 
-	UPROPERTY(BlueprintReadWrite, Category = "Class Types", meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, Category = "Lables", meta = (BindWidget))
 		class UTextBlock* TextLabel;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Lables", meta = (BindWidget))
+		class UTextBlock* RockCounter;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Buttons", meta = (BindWidget))
 		class UButton* CrouchButton;
@@ -30,14 +33,25 @@ protected:
 
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-		void CrouchButtonPressed();
+	UFUNCTION(BlueprintCallable)
+	void CrouchButtonPressed();
 
-	UFUNCTION()
-		void SwitchCameraButtonPressed();
+	UFUNCTION(BlueprintCallable)
+	void SwitchCameraButtonPressed();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void UpdateRockCounter(int32 _Amount);
+
+	
 
 protected:
 	/* player Reference */
 	UPROPERTY(BlueprintReadWrite, Category = "Player Reference")
-		AGameCharacter* Player;
+		class AGameCharacter* Player;
+
+	/* player Reference */
+	UPROPERTY(BlueprintReadWrite)
+	int32 RockAmount;
+
 };

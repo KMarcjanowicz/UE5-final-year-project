@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Components/ArrowComponent.h"
 #include "Perception/AISightTargetInterface.h"
+#include "Components/ChildActorComponent.h"
+#include "Components/SplineComponent.h"
 #include "GameCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -23,7 +25,15 @@ class AGameCharacter : public ACharacter, public IAISightTargetInterface
 
 	/** First Person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FPCamera;
+	class UCameraComponent* FPCamera;
+
+	/** component from which position's the throwable grenade will be spawned */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Character, meta = (AllowPrivateAccess = "true"))
+	class UChildActorComponent* ThrowableReferenceComponent;
+
+	/** component from which the prediction of the path will be made*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Character, meta = (AllowPrivateAccess = "true"))
+	class USplineComponent* SplineComponent;
 
 public:
 	AGameCharacter();
@@ -33,7 +43,12 @@ public:
 	float TurnRateGamepad;
 
 	//Array of PointLight actors
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI)
 	TArray<AActor*> PointLights;
+
+	//Integer keeping track of how many rocks the player has in the inv
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	int32 RockAmount;
 
 protected:
 
@@ -83,11 +98,29 @@ public:
 	UFUNCTION()
 	void ClickCrouch();
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetRockAmount();
+
+	UFUNCTION(BlueprintCallable)
+	void SetRockAmount(int32 _Amount);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AimThrowObject();
+
+
 protected:
 
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Crouch)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI)
 		bool bIsCrouching;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		bool bIsAiming;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		float ThrowForce;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		float DetectionRate;
 
 	/* function to check multiple bones in the character */
 	virtual bool CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation, int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor = nullptr, const bool* bWasVisible = nullptr, int32* UserData = nullptr) const;
@@ -104,6 +137,7 @@ public:
 
 	UFUNCTION()
 	void NextViewTarget();
+
 	int32 Index;
 };
 

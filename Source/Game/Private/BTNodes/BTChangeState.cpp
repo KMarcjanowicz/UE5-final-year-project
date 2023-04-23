@@ -14,11 +14,8 @@ UBTChangeState::UBTChangeState()
 
 EBTNodeResult::Type UBTChangeState::ExecuteTask(UBehaviorTreeComponent& _OwnerComp, uint8* _NodeMemory)
 {
-	//change logic AI state of pawn
-	APawn* AIPawn{ _OwnerComp.GetAIOwner()->GetPawn() };
-
 	//cast to custom controller
-	AAiEnemyController* AIController = Cast<AAiEnemyController>(AIPawn);
+	AAiEnemyController* AIController = Cast<AAiEnemyController>(_OwnerComp.GetAIOwner());
 
 	if (AIController) {
 		AIController->SetAIState(State);

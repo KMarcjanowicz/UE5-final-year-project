@@ -41,18 +41,31 @@ AGameCharacter::AGameCharacter()
 	GetCharacterMovement()->MaxWalkSpeedCrouched = 60.0f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = 300.0f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	CameraBoom->SocketOffset = FVector3d(0.0f, 0.0f, 200.0f);
+	CameraBoom->SocketOffset = FVector3d(0.0f, 0.0f, 300.0f);
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	FollowCamera->SetRelativeRotation(FQuat(0.0f, -30.0f, 0.0f, 0.0f));
+
+	//Throwable spawn reference
+	ThrowableReferenceComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("ThrowableRef"));
+	ThrowableReferenceComponent->SetupAttachment(RootComponent);
+	ThrowableReferenceComponent->SetRelativeLocation(FVector(40.0f, 0.0f, 50.0f));
+
+	//Spline reference
+	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("PreditionPath"));
+	SplineComponent->SetupAttachment(RootComponent);
+
+
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -61,6 +74,15 @@ AGameCharacter::AGameCharacter()
 
 	// for crouching logic
 	bIsCrouching = false;
+
+	// for throwing logic
+	bIsAiming = false;
+
+	ThrowForce = 800.0f;
+
+	RockAmount = 0;
+
+	DetectionRate = 0.25f;
 
 	ViewTargets.SetNum(5);
 	ViewTargets.Insert(TEXT("Head"), 0);
@@ -187,13 +209,23 @@ void AGameCharacter::ClickCrouch()
 {
 	if (!bIsCrouching) {
 		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Crouch!")));
-		Crouch();
+		Crouch(true);
 		bIsCrouching = true;
 	}
 	else {
 		UnCrouch();
 		bIsCrouching = false;
 	}
+}
+
+int32 AGameCharacter::GetRockAmount()
+{
+	return RockAmount;
+}
+
+void AGameCharacter::SetRockAmount(int32 _Amount)
+{
+	RockAmount = _Amount;
 }
 
 // custom view target for AI Perception
