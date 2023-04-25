@@ -19,10 +19,11 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category="Class Types")
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category="Class Types")
 	TSubclassOf<UUserWidget> WidgetClass;
 
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Runtime")
 	class UUWPlayerInterface* PlayerInterface;
 
 public:
