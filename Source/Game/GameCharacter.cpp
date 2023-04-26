@@ -82,7 +82,7 @@ AGameCharacter::AGameCharacter()
 
 	RockAmount = 0;
 
-	DetectionRate = 0.25f;
+	DetectionRate = 0.5f;
 
 	ViewTargets.SetNum(5);
 	ViewTargets.Insert(TEXT("Head"), 0);
@@ -140,9 +140,19 @@ void AGameCharacter::Tick(float _DeltaSeconds)
 				if (!GetWorld()->LineTraceSingleByChannel(Hit, this->GetActorLocation(), PointLight->GetActorLocation(), ECC_Visibility, QueryParams)) {
 					//we are visible in the light!
 					bIsVisibleInLight = true;
+
 					break;
 				}
 			}
+		}
+	}
+
+	if (bIsVisibleInLight) {
+		DetectionRate = 1.0f;
+	}
+	else {
+		if (DetectionRate == 1.0f) {
+			DetectionRate = 0.5f;
 		}
 	}
 }
@@ -273,4 +283,9 @@ void AGameCharacter::NextViewTarget()
 {
 	Index < ViewTargets.Num() - 1 ? Index++ : Index = 0;
 	TargetBone = ViewTargets[Index];
+}
+
+float AGameCharacter::GetDetectionRate()
+{
+	return DetectionRate;
 }

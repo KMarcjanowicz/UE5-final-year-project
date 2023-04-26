@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/SpotLightComponent.h"
+
 #include "AiEnemyCharacter.generated.h"
 
 UCLASS()
@@ -22,7 +23,10 @@ public:
 	class UBehaviorTree* BehaviorTree;
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UTextRenderComponent* LabelComp;
+	class UTextRenderComponent* StateLabelComp;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UTextRenderComponent* AlarmedLabelComp;
 
 	// sight light for marking how much the Ai enemies can see
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -30,6 +34,12 @@ public:
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpotLightComponent* SpotLightComp;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USphereComponent* SightDebug;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USphereComponent* HearingDebug;
 
 protected:
 	// Called when the game starts or when spawned

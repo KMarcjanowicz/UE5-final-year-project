@@ -2,6 +2,7 @@
 
 
 #include "Enemy/AiEnemyCharacter.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -11,9 +12,16 @@ AAiEnemyCharacter::AAiEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//TextRenderComp
-	LabelComp = CreateDefaultSubobject<UTextRenderComponent>("Label");
-	LabelComp->SetupAttachment(RootComponent);
-	LabelComp->SetHorizontalAlignment(EHTA_Center);
+	StateLabelComp = CreateDefaultSubobject<UTextRenderComponent>("State Label");
+	StateLabelComp->SetupAttachment(RootComponent);
+	StateLabelComp->SetHorizontalAlignment(EHTA_Center);
+	StateLabelComp->SetRelativeLocation(FVector(10.0f, 0.0f, 110.0f));
+
+	//TextRenderComp2
+	AlarmedLabelComp = CreateDefaultSubobject<UTextRenderComponent>("Alarm Label");
+	AlarmedLabelComp->SetupAttachment(RootComponent);
+	AlarmedLabelComp->SetHorizontalAlignment(EHTA_Center);
+	AlarmedLabelComp->SetRelativeLocation(FVector(10.0f, 0.0f, 90.0f));
 
 	//SightLight Comp
 	SightLightComp = CreateDefaultSubobject<USpotLightComponent>("SightLight");
@@ -26,6 +34,19 @@ AAiEnemyCharacter::AAiEnemyCharacter()
 	SpotLightComp->SetupAttachment(RootComponent);
 	SpotLightComp->SetOuterConeAngle(45.0);
 	SpotLightComp->SetRelativeLocation(FVector(20.0f, 0.0f, 50.0f));
+
+	//Debug Spheres
+	SightDebug = CreateDefaultSubobject<USphereComponent>("SightDebug");
+	SightDebug->SetupAttachment(RootComponent);
+	SightDebug->SetSphereRadius(750.0f);
+	SightDebug->ShapeColor = FColor::Green;
+	SightDebug->bHiddenInGame = false;
+
+	HearingDebug = CreateDefaultSubobject<USphereComponent>("HearingDebug");
+	HearingDebug->SetupAttachment(RootComponent);
+	HearingDebug->SetSphereRadius(1250.0f);
+	HearingDebug->ShapeColor = FColor::Yellow;
+	HearingDebug->bHiddenInGame = false;
 }
 
 // Called when the game starts or when spawned
@@ -50,16 +71,19 @@ void AAiEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void AAiEnemyCharacter::ChangeTextOnLabel(FString _TextToChange)
 {
 	if (_TextToChange == "Normal") {
-		LabelComp->SetTextRenderColor(FColor::Green);
-		LabelComp->SetText(FText::AsCultureInvariant("..."));
+		StateLabelComp->SetTextRenderColor(FColor::Green);
+		AlarmedLabelComp->SetTextRenderColor(FColor::Green);
+		StateLabelComp->SetText(FText::AsCultureInvariant("..."));
 	}
 	else if (_TextToChange == "Investigate") {
-		LabelComp->SetTextRenderColor(FColor::Yellow);
-		LabelComp->SetText(FText::AsCultureInvariant("?"));
+		StateLabelComp->SetTextRenderColor(FColor::Yellow);
+		AlarmedLabelComp->SetTextRenderColor(FColor::Yellow);
+		StateLabelComp->SetText(FText::AsCultureInvariant("?"));
 	}
 	else if (_TextToChange == "Chase") {
-		LabelComp->SetTextRenderColor(FColor::Red);
-		LabelComp->SetText(FText::AsCultureInvariant("!"));
+		StateLabelComp->SetTextRenderColor(FColor::Red);
+		AlarmedLabelComp->SetTextRenderColor(FColor::Red);
+		StateLabelComp->SetText(FText::AsCultureInvariant("!"));
 	}
 	
 }

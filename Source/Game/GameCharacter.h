@@ -138,6 +138,9 @@ public:
 	UFUNCTION()
 	void NextViewTarget();
 
+	UFUNCTION()
+	float GetDetectionRate();
+
 	int32 Index;
 };
 

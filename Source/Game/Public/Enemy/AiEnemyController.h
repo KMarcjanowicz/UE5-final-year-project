@@ -21,7 +21,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Component
+	virtual void Tick(float _DeltaTime) override;
 
 	/* Perception Component */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
@@ -29,6 +29,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		FString State;
+
+	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		AGameCharacter* PlayerRef;
+
 public:
 	AAiEnemyController(const FObjectInitializer& _ObjectInitializer);
 
@@ -45,20 +49,23 @@ public:
 		class UBehaviorTreeComponent* BehaviorTreeComp;
 
 	/* keys for the blackboard */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
 		FName LocationToGoKey;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
 		FName PlayerKey;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
 		FName LastKnownLocation;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
 		FName InvestigatingState;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
 		FName SeeTarget;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = BlackBoardKeys, meta = (AllowPrivateAccess = "true"))
+		FName AlarmedFloatKey;
 
 	UFUNCTION()
 		void OnPerception(AActor* _Actor, FAIStimulus _Stimulus);
@@ -73,9 +80,18 @@ public:
 	FAISenseID SightID;
 	FAISenseID HearingID;
 
+public:
 	/* percentage of how much the enemy is alarmed - PayDay style */
 	UPROPERTY(BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
 		float AlarmedPercentage = 0.0f;
+
+	/* bool value responsible for showing that player is still in sight */
+	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		bool bSeesTarget = false;
+
+	/* distance to target that is in sight */
+	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		float DistanceToTarget = 0.0f;
 
 	virtual void OnPossess(APawn* _InPawn) override;
 
