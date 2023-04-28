@@ -9,6 +9,19 @@ AGameGameMode::AGameGameMode()
 
 }
 
+int32 AGameGameMode::GetScore()
+{
+	return Score;
+}
+
+void AGameGameMode::SetScore(int32 _Amount)
+{
+	
+	Score += _Amount;
+	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Adding Score: %i"), Score));
+	PlayerInterface->SetScore(Score);
+}
+
 void AGameGameMode::BeginPlay()
 {
 	if (IsValid(WidgetClass))

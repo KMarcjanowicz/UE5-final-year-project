@@ -38,7 +38,7 @@ void AAiEnemyController::Tick(float _DeltaTime)
 			AlarmedPercentage = 100.0f;
 		}
 	}
-	/*else {
+	else if (!bIsInvestigating) {
 		if (AlarmedPercentage > 0.0f) {
 			AlarmedPercentage -= 1 * 100 * 1/DistanceToTarget;
 		}
@@ -46,7 +46,7 @@ void AAiEnemyController::Tick(float _DeltaTime)
 			AlarmedPercentage = 0;
 		}
 	}
-	*/
+	
 
 
 
@@ -93,25 +93,20 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 	/* stimuli ID */
 	SightID = Sight->GetSenseID();
 	HearingID = Hearing->GetSenseID();
-
-	
 }
 
 void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 {
 	FString Name = _Actor->GetClass()->GetName();
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Name of Class = %s "), *Name));
-
-	FVector StimulusLocation = _Stimulus.StimulusLocation;
-	float Distance = FVector::Dist(Agent->GetActorLocation(), StimulusLocation);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString::Printf(TEXT("Distance to the stimulus = %f "), Distance));
-
 	if (_Stimulus.Type == SightID) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Name of Class = %s "), *Name));
 		//cast to the pawn that caused the stimulus
 		AGameCharacter* Chr = Cast<AGameCharacter>(_Actor);
 		//escape the sight function if the visible target wasn't player
 		if (Chr == nullptr) { return; }
+
+		bIsInvestigating = true;
 
 		if (bSeesTarget)
 		{
@@ -141,6 +136,7 @@ void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 	}
 	else if (_Stimulus.Type == HearingID) {
 
+		bIsInvestigating = true;
 		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Yellow, FString::Printf(TEXT("Hearing!")));
 
 		AlarmedPercentage += 10.0f;
@@ -166,6 +162,7 @@ void AAiEnemyController::OnPossess(APawn* _InPawn)
 	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Possessed")));
 
 	Agent = Cast<AAiEnemyCharacter>(GetPawn());
+	Index = Agent->Index;
 
 	if (Agent) {
 		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Agent is valid")));
@@ -182,6 +179,7 @@ void AAiEnemyController::OnPossess(APawn* _InPawn)
 void AAiEnemyController::InvestigateOnSight_Implementation()
 {
 	BlackboardComp->SetValueAsBool(InvestigatingState, false);
+	bIsInvestigating = false;
 }
 
 void AAiEnemyController::SetAIState(FString _State)

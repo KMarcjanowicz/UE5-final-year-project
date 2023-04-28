@@ -104,6 +104,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetRockAmount(int32 _Amount);
 
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void AimThrowObject();
 

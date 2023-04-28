@@ -14,6 +14,14 @@ EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _O
 {
 	AAiEnemyPatrolController* AIController = Cast<AAiEnemyPatrolController>(_OwnerComp.GetAIOwner());
 
+	if (AIController->Index == 1) {
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Name of AI: %i"), AIController->Index));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Green, FString::Printf(TEXT("Name of AI: %i"), AIController->Index));
+	}
+	
+
 	if (AIController) {
 
 		/* Get Blackboard component */
@@ -22,6 +30,14 @@ EBTNodeResult::Type UBTSelectPatrolPoint::ExecuteTask(UBehaviorTreeComponent& _O
 		AAIPatrolPoint* CurrentPoint = Cast<AAIPatrolPoint>(BlackBoardComp->GetValueAsObject("LocationToGo"));
 
 		TArray<AActor*>AvailablePatrolPoints = AIController->GetPatrolPoints();
+
+		if (AIController->Index == 1) {
+			GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Length: %i"), AvailablePatrolPoints.Num()));
+		}
+		else {
+			GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Green, FString::Printf(TEXT("Length: %i"), AvailablePatrolPoints.Num()));
+		}
+		//GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red, FString::Printf(TEXT("Length: %i"), AvailablePatrolPoints.Num()));
 
 		AAIPatrolPoint* NextPatrolPoint = nullptr;
 

@@ -41,6 +41,9 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USphereComponent* HearingDebug;
 
+	UPROPERTY(Category = General, EditAnywhere, meta = (AllowPrivateAccess = "true"))
+		int32 Index;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

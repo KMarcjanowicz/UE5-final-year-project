@@ -25,8 +25,6 @@ public:
 	int32 CurrentPatrolPoint;
 
 	/* Inline getter functions */
-
-	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; };
 	FORCEINLINE TArray<AActor*> GetPatrolPoints() const { return PatrolPoints; };
 
 };

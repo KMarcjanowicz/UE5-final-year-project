@@ -31,7 +31,7 @@ protected:
 		FString State;
 
 	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
-		AGameCharacter* PlayerRef;
+		class AGameCharacter* PlayerRef;
 
 public:
 	AAiEnemyController(const FObjectInitializer& _ObjectInitializer);
@@ -80,6 +80,9 @@ public:
 	FAISenseID SightID;
 	FAISenseID HearingID;
 
+	UPROPERTY(Category = General, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+		int32 Index;
+
 public:
 	/* percentage of how much the enemy is alarmed - PayDay style */
 	UPROPERTY(BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
@@ -88,6 +91,10 @@ public:
 	/* bool value responsible for showing that player is still in sight */
 	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
 		bool bSeesTarget = false;
+
+	/* bool value responsible for showing that is investigation and stuff */
+	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
+		bool bIsInvestigating = false;
 
 	/* distance to target that is in sight */
 	UPROPERTY(BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))

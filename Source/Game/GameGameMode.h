@@ -26,6 +26,16 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Runtime")
 	class UUWPlayerInterface* PlayerInterface;
 
+	//Integer keeping track of how many rocks the player has in the inv
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		int32 Score;
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetScore();
+
+	UFUNCTION(BlueprintCallable)
+		void SetScore(int32 _Amount);
+
 public:
 	virtual void BeginPlay() override;
 

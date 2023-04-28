@@ -39,19 +39,19 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SwitchCameraButtonPressed();
 
-public:
-	UFUNCTION(BlueprintCallable)
-	void UpdateRockCounter(int32 _Amount);
-
-	
-
 protected:
 	/* player Reference */
 	UPROPERTY(BlueprintReadWrite, Category = "Player Reference")
 		class AGameCharacter* Player;
 
-	/* player Reference */
-	UPROPERTY(BlueprintReadWrite)
-	int32 RockAmount;
+public:
+	//Integer keeping track of how many rocks the player has in the inv
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		int32 Score;
 
+	UFUNCTION(BlueprintCallable)
+		int32 GetScore();
+
+	UFUNCTION(BlueprintCallable)
+		void SetScore(int32 _Amount);
 };

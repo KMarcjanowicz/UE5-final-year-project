@@ -2,7 +2,6 @@
 
 
 #include "UWPlayerInterface.h"
-
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -32,7 +31,14 @@ void UUWPlayerInterface::SwitchCameraButtonPressed()
 	Player->AimThrowObject();
 }
 
-void UUWPlayerInterface::UpdateRockCounter(int32 _Amount)
+int32 UUWPlayerInterface::GetScore()
 {
-	RockAmount = _Amount;
+	return Score;
+}
+
+void UUWPlayerInterface::SetScore(int32 _Amount)
+{
+	
+	Score = _Amount;
+	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::White, FString::Printf(TEXT("Adding score to Interface: %f"), Score));
 }
