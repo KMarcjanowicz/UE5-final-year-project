@@ -27,4 +27,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
 		float WalkSpeed{ 100.0f };
+
+	virtual FString GetStaticDescription() const override;
 };

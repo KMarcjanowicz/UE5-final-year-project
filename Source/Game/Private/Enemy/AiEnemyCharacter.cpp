@@ -36,6 +36,7 @@ AAiEnemyCharacter::AAiEnemyCharacter()
 	SpotLightComp->SetRelativeLocation(FVector(20.0f, 0.0f, 50.0f));
 
 	//Debug Spheres
+	/*
 	SightDebug = CreateDefaultSubobject<USphereComponent>("SightDebug");
 	SightDebug->SetupAttachment(RootComponent);
 	SightDebug->SetSphereRadius(750.0f);
@@ -47,6 +48,7 @@ AAiEnemyCharacter::AAiEnemyCharacter()
 	HearingDebug->SetSphereRadius(1250.0f);
 	HearingDebug->ShapeColor = FColor::Yellow;
 	HearingDebug->bHiddenInGame = false;
+	*/
 }
 
 // Called when the game starts or when spawned

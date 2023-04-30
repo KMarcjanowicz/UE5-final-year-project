@@ -35,11 +35,13 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpotLightComponent* SpotLightComp;
 
+	/*
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USphereComponent* SightDebug;
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USphereComponent* HearingDebug;
+	*/
 
 	UPROPERTY(Category = General, EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		int32 Index;

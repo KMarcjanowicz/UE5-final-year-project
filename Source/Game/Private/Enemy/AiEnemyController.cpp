@@ -72,11 +72,12 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 	Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 	Hearing->DetectionByAffiliation.bDetectNeutrals = true;
 
-
 	//register the sight and hearing sense to the perception component
 	PerceptionComp->ConfigureSense(*Sight);
 	PerceptionComp->ConfigureSense(*Hearing);
 	PerceptionComp->SetDominantSense(Sight->GetSenseImplementation());
+
+
 
 	/* initialize the BB and BT components*/
 	BehaviorTreeComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
@@ -97,10 +98,11 @@ AAiEnemyController::AAiEnemyController(const FObjectInitializer& _ObjectInitiali
 
 void AAiEnemyController::OnPerception(AActor* _Actor, FAIStimulus _Stimulus)
 {
-	FString Name = _Actor->GetClass()->GetName();
-
 	if (_Stimulus.Type == SightID) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Name of Class = %s "), *Name));
+
+		if (_Actor->ActorHasTag(TEXT("Door"))) {
+
+		}
 		//cast to the pawn that caused the stimulus
 		AGameCharacter* Chr = Cast<AGameCharacter>(_Actor);
 		//escape the sight function if the visible target wasn't player

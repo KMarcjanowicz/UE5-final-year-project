@@ -50,3 +50,8 @@ EBTNodeResult::Type UBTRandomLocation::ExecuteTask(UBehaviorTreeComponent& _Owne
 
 	return EBTNodeResult::Failed;
 }
+
+FString UBTRandomLocation::GetStaticDescription() const
+{
+	return FString::Printf(TEXT("WalkSpeed: %s \nSearchRadius: %s"), *FString::SanitizeFloat(WalkSpeed), *FString::SanitizeFloat(SearchRadius));
+}

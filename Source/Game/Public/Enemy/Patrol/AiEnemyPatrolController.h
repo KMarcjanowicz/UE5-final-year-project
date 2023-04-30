@@ -15,16 +15,21 @@ class GAME_API AAiEnemyPatrolController : public AAiEnemyController
 	GENERATED_BODY()
 
 	/* array of actor points for the AI logic */
-	UPROPERTY(VisibleAnywhere, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
 	TArray<AActor*> PatrolPoints;
 
 public:
 
 	virtual void OnPossess(APawn* _InPawn) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AIRotateToPatrolPoint();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, meta = (AllowPrivateAccess = "true"))
 	int32 CurrentPatrolPoint;
 
 	/* Inline getter functions */
 	FORCEINLINE TArray<AActor*> GetPatrolPoints() const { return PatrolPoints; };
+	FORCEINLINE AActor* GetCurrentPatrolPoint(int32 _index) const { return PatrolPoints[_index]; };
 
 };

@@ -19,23 +19,23 @@ EBTNodeResult::Type UBTRotateToPoint::ExecuteTask(UBehaviorTreeComponent& _Owner
 
 	if (AIController) 
 	{
+		AIController->AIRotateToPatrolPoint();
+		/*
 		//get AI Pawn
 		const APawn* AIPawn{ AIController->GetPawn() };
 
 		//Black Board comp get it
 		UBlackboardComponent* BlackBoardComp = AIController->GetBlackboardComp();
 
-		//get the next location to which the actor will need to go
-		AAIPatrolPoint* CurrentPoint = Cast<AAIPatrolPoint>(BlackBoardComp->GetValueAsObject("LocationToGo"));
-
-		FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(AIPawn->GetActorLocation(), CurrentPoint->GetActorLocation());
+		FRotator NewRotation = AIController->GetCurrentPatrolPoint(AIController->CurrentPatrolPoint)->GetActorRotation();
 
 		NewRotation.Pitch = 0;
 
 		FLatentActionInfo LatentInfo;
 		LatentInfo.CallbackTarget = this;
-		UKismetSystemLibrary::MoveComponentTo(AIPawn->GetRootComponent(), AIPawn->GetActorLocation(), NewRotation, false, false, 0.5f, true,
+		UKismetSystemLibrary::MoveComponentTo(AIPawn->GetRootComponent(), AIPawn->GetRootComponent()->GetComponentLocation(), NewRotation, false, false, 0.2f, true,
 		EMoveComponentAction::Type::Move, LatentInfo);
+		*/
 
 		//Signal the behaviour tree comp
 		FinishLatentTask(_OwnerComp, EBTNodeResult::Succeeded);
